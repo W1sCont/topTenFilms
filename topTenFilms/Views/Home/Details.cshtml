@@ -1,0 +1,57 @@
+﻿@model topTenFilms.Models.Movie
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="container my-5">
+    
+    <div class="card movie-card border border-primary border-opacity-25 rounded-4 overflow-hidden shadow-lg" style="background-color: #161F33">
+        <div class="row g-0">
+
+            <div class="col-md-5 col-lg-4 position-relative">
+                <img src="/Posters/@Model.Image" class="img-fluid w-100 h-100 object-fit-cover min-vh-40" alt="@Model.Name">
+                
+                <div class="position-absolute top-0 start-0 m-3">
+                    <span class="badge badge-rating fs-6 px-3 py-2 rounded-pill shadow-sm">
+                        <i class="bi bi-star-fill text-warning me-1"></i>@Model.Rating / 10
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-md-7 col-lg-8 d-flex flex-column justify-content-between">
+                <div class="card-body p-4 p-lg-5">
+
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                        <h1 class="display-6 fw-bold text-light mb-0">@Model.Name</h1>
+                        <span class="badge bg-black text-secondary border border-secondary border-opacity-25 fs-6 px-3 py-2 rounded-pill">
+                            <i class="bi bi-calendar3 me-1"></i>@Model.YearOfRelease
+                        </span>
+                    </div>
+
+                    <div class="mb-4">
+                        <span class="badge bg-primary bg-opacity-25 text-primary border border-primary border-opacity-25 px-3 py-2 rounded-pill fs-6">
+                            <i class="bi bi-film me-1"></i>@Model.Genre
+                        </span>
+                    </div>
+
+                    <hr class="border-secondary border-opacity-25 my-4">
+
+                    <div class="mb-4">
+                        <h5 class="text-uppercase text-muted fs-7 fw-semibold tracking-wider mb-2">Про фільм</h5>
+                        <p class="card-text text-light text-opacity-85 fs-5 leading-relaxed">
+                            @Model.Description
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="card-footer bg-transparent border-top border-secondary border-opacity-25 p-4 p-lg-5 pt-0">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                        <a asp-action="Index" class="btn btn-outline-secondary px-4 rounded-pill" style="color: #E2E8F0;">Назад</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

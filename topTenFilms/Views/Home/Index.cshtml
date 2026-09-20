@@ -1,0 +1,54 @@
+﻿@model IEnumerable<topTenFilms.Models.Movie>
+@{
+    ViewData["Title"] = "TMV";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Top 10 Films</h1>
+    <div class="container my-5">
+        <div class="row justify-content-center">
+
+            <div class="col-12 col-lg-9 col-xl-8">
+                @foreach (var movie in Model)
+                {
+                    <div class="card mb-4 shadow-sm border-0 text-white overflow-hidden" style="background-color: #161F33;">
+                        <div class="row g-0 align-items-center">
+
+                            <div class="col-md-4 col-lg-3 text-center">
+                                <img src="/Posters/@movie.Image"
+                                     class="img-fluid rounded-start object-fit-cover w-100"
+                                     style="max-height: 250px;"
+                                     alt="Постер фільму">
+                            </div>
+
+                            <div class="col-md-8 col-lg-9">
+                                <div class="card-body p-4">
+
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h3 class="card-title h4 mb-0 fw-bold">@movie.Name</h3>
+                                        <span class="badge bg-primary fs-6">@movie.YearOfRelease</span>
+                                    </div>
+
+                                    <div class="mb-3 text-muted small">
+                                        <span class="badge bg-secondary me-1">@movie.Genre</span>
+                                    </div>
+
+                                    <p class="card-text text-light text-opacity-75 mb-4">
+                                        @movie.Description
+                                    </p>
+
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <a asp-action="Details" asp-route-id="@movie.Id" class="btn btn-outline-light btn-sm px-4 rounded-pill">Детальніше</a>
+                                        <span class="text-warning small"><i class="bi bi-star-fill"></i>@movie.Rating</span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

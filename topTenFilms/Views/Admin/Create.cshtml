@@ -1,0 +1,69 @@
+﻿@model topTenFilms.Models.Movie
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2 class="text-secondary mb-4">Додати новий фільм</h2>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <form asp-action="Create" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label fw-bold"></label>
+                        <input asp-for="Name" class="form-control" placeholder="Введіть назву" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="Director" class="form-label fw-bold"></label>
+                        <input asp-for="Director" class="form-control" placeholder="Введіть режисера" />
+                        <span asp-validation-for="Director" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="Genre" class="form-label fw-bold"></label>
+                        <input asp-for="Genre" class="form-control" type="text" placeholder="Введіть жанр" />
+                        <span asp-validation-for="Genre" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label asp-for="YearOfRelease" class="form-label fw-bold"></label>
+                        <input asp-for="YearOfRelease" class="form-control" type="number" placeholder="Введіть рік випуску" max="@DateTime.Now.Year/>
+                        <span asp-validation-for="YearOfRelease" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Image" class="form-label fw-bold"></label>
+                        <input asp-for="Image" class="form-control" type="file" name="uploadedFile" placeholder="Виберіть зображення" />
+                        <span asp-validation-for="Image" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Description" class="form-label fw-bold"></label>
+                        <textarea asp-for="Description" class="form-control" placeholder="Введіть опис"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label asp-for="Rating" class="form-label fw-bold"></label>
+                        <input asp-for="Rating" class="form-control" type="number" step="0.1 min="0" max="10" placeholder="Введіть рейтинг" />
+                        <span asp-validation-for="Rating" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-light border">Повернутися</a>
+                        <input type="submit" value="Зберегти" class="btn btn-primary px-4" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
