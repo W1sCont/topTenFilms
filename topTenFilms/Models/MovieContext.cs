@@ -6,7 +6,6 @@ namespace topTenFilms.Models
         public DbSet<Movie> Movies { get; set; }
         public MovieContext(DbContextOptions<MovieContext> options) : base(options)
         {
-            Database.EnsureDeleted();
             Database.EnsureCreated();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
