@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using topTenFilms.Models;
+using topTenFilms.Annotations;
 
 namespace topTenFilms.Controllers
 {
@@ -30,25 +31,30 @@ namespace topTenFilms.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [RequestSizeLimit(1_000_000_000)]
-        public async Task<IActionResult> Create([Bind("Id,Name,Director,Genre,YearOfRelease,Image,Description,Rating")] Movie movie, IFormFile? uploadedFile)
+        public async Task<IActionResult> Create([Bind("Id,Name,Director,Genre,YearOfRelease,Poster,Description,Rating")] MovieDTO dto)
         {
-            if (uploadedFile is null || uploadedFile.Length == 0)
-            {
-                ModelState.AddModelError("uploadedFile", "Будь ласка, завантажте постер");
-            }
-            ModelState.Remove(nameof(Movie.Image));
-            if (!ModelState.IsValid) return View(movie);
+            if (!ModelState.IsValid) return View(dto);
 
-            var fileName = Path.GetFileName(uploadedFile.FileName);
+
+            var fileName = Path.GetFileName(dto.Poster.FileName);
             var relativePath = $"{fileName}";
             var absolutePath = Path.Combine(appEnvironment.WebRootPath, "Posters", fileName);
             Directory.CreateDirectory(Path.Combine(appEnvironment.WebRootPath, "Posters"));
             await using (var fileStream = new FileStream(absolutePath, FileMode.Create))
             {
-                await uploadedFile.CopyToAsync(fileStream);
+                await dto.Poster.CopyToAsync(fileStream);
             }
 
-            movie.Image = relativePath;
+            var movie = new Movie
+            {
+                Name = dto.Name,
+                Director = dto.Director,
+                Genre = dto.Genre,
+                YearOfRelease = dto.YearOfRelease,
+                Image = relativePath,
+                Description = dto.Description,
+                Rating = dto.Rating
+            };
 
             _context.Add(movie);
             await _context.SaveChangesAsync();
@@ -61,34 +67,49 @@ namespace topTenFilms.Controllers
             var film = await _context.Movies
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
-            return film is null ? NotFound() : View(film);
+            var dto = new MovieDTO
+            {
+                Id = film.Id,
+                Name = film.Name,
+                Director = film.Director,
+                Genre = film.Genre,
+                YearOfRelease = film.YearOfRelease,
+                Description = film.Description,
+                Rating = film.Rating
+            };
+            return film is null ? NotFound() : View(dto);
         }
         // Post: Home/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Director,Genre,YearOfRelease,Image,Description,Rating")] Movie movie, IFormFile? uploadedFile)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Director,Genre,YearOfRelease,Poster,Description,Rating")] MovieDTO dto)
         {
-            if (id != movie.Id) return NotFound();
-            if (!ModelState.IsValid) return View(movie);
-
-            if (uploadedFile is not null)
+            if (id != dto.Id) return NotFound();
+            if (!ModelState.IsValid) return View(dto);
+            Movie movie = null;
+            if (dto.Poster is not null)
             {
-                var fileName = Path.GetFileName(uploadedFile.FileName);
+                var fileName = Path.GetFileName(dto.Poster.FileName);
                 var relativePath = $"{fileName}";
-                movie.Image = relativePath;
                 var absolutePath = Path.Combine(appEnvironment.WebRootPath, "Posters", fileName);
                 Directory.CreateDirectory(Path.Combine(appEnvironment.WebRootPath, "Posters"));
                 await using (var fileStream = new FileStream(absolutePath, FileMode.Create))
                 {
-                    await uploadedFile.CopyToAsync(fileStream);
+                    await dto.Poster.CopyToAsync(fileStream);
                 }
+                movie = new Movie
+                {
+                    Id = dto.Id,
+                    Name = dto.Name,
+                    Director = dto.Director,
+                    Genre = dto.Genre,
+                    YearOfRelease = dto.YearOfRelease,
+                    Image = relativePath,
+                    Description = dto.Description,
+                    Rating = dto.Rating
+                };
             }
-            else
-            {
-                var existingMovie = await _context.Movies.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
-                if (existingMovie is null) return NotFound();
-                movie.Image = existingMovie.Image;
-            }
+            else return View(dto);
 
             _context.Update(movie);
             await _context.SaveChangesAsync();

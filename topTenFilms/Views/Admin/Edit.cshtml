@@ -1,4 +1,4 @@
-﻿@model topTenFilms.Models.Movie
+﻿@model topTenFilms.Models.MovieDTO
 @{
     ViewData["Title"] = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -38,9 +38,9 @@
                     </div>
 
                     <div class="mb-4">
-                        <label asp-for="Image" class="form-label fw-bold"></label>
-                        <input asp-for="Image" class="form-control" type="file" name="uploadedFile" placeholder="Виберіть зображення" value="@Model.Image"/>
-                        <span asp-validation-for="Image" class="text-danger"></span>
+                        <label asp-for="Poster" class="form-label fw-bold"></label>
+                        <input asp-for="Poster" class="form-control" type="file" name="Poster" placeholder="Виберіть зображення" value="@Model.Poster"/>
+                        <span asp-validation-for="Poster" class="text-danger"></span>
                     </div>
 
                     <div class="mb-4">
